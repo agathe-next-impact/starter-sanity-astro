@@ -57,5 +57,10 @@ export const siteSettings = defineType({
       title: 'Default SEO',
       type: 'seo',
     },
+    {
+      name: 'theme',
+      title: 'Theme / Design System',
+      type: 'theme',
+    },
   ],
 });

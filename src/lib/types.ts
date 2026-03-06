@@ -47,6 +47,37 @@ export interface SocialLink {
   url: string;
 }
 
+export interface ThemeData {
+  primaryColor?: string;
+  primaryForeground?: string;
+  secondaryColor?: string;
+  secondaryForeground?: string;
+  accentColor?: string;
+  accentForeground?: string;
+  backgroundColor?: string;
+  foregroundColor?: string;
+  mutedColor?: string;
+  mutedForeground?: string;
+  destructiveColor?: string;
+  borderColor?: string;
+  ringColor?: string;
+  darkBackground?: string;
+  darkForeground?: string;
+  darkPrimary?: string;
+  darkPrimaryForeground?: string;
+  darkSecondary?: string;
+  darkAccent?: string;
+  darkMuted?: string;
+  darkMutedForeground?: string;
+  darkDestructive?: string;
+  darkBorder?: string;
+  fontFamily?: string;
+  fontFamilyHeading?: string;
+  fontWeights?: string;
+  borderRadius?: number;
+  hueShift?: number;
+}
+
 export interface SiteSettings {
   siteName: string;
   tagline?: string;
@@ -56,6 +87,7 @@ export interface SiteSettings {
   address?: string;
   socialLinks?: SocialLink[];
   seo?: SeoData;
+  theme?: ThemeData;
 }
 
 export interface Post {

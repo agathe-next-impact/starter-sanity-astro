@@ -26,10 +26,72 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const resolvedOgImage = ogImage
   ?? (settings?.seo?.ogImage ? urlFor(settings.seo.ogImage).width(1200).height(630).url() : undefined);
+
+// Theme — build CSS overrides from Sanity
+const t = settings?.theme;
+const cssOverrides: string[] = [];
+
+const lightMap: Record<string, string | undefined> = {
+  '--primary': t?.primaryColor,
+  '--primary-foreground': t?.primaryForeground,
+  '--secondary': t?.secondaryColor,
+  '--secondary-foreground': t?.secondaryForeground,
+  '--accent': t?.accentColor,
+  '--accent-foreground': t?.accentForeground,
+  '--background': t?.backgroundColor,
+  '--foreground': t?.foregroundColor,
+  '--muted': t?.mutedColor,
+  '--muted-foreground': t?.mutedForeground,
+  '--destructive': t?.destructiveColor,
+  '--border': t?.borderColor,
+  '--ring': t?.ringColor,
+};
+for (const [prop, val] of Object.entries(lightMap)) {
+  if (val) cssOverrides.push(`${prop}:${val}`);
+}
+if (t?.borderRadius != null) cssOverrides.push(`--radius:${t.borderRadius}rem`);
+if (t?.hueShift != null) cssOverrides.push(`--hue-primary:${t.hueShift}`);
+
+const darkEntries: string[] = [];
+const darkMap: Record<string, string | undefined> = {
+  '--background': t?.darkBackground,
+  '--foreground': t?.darkForeground,
+  '--primary': t?.darkPrimary,
+  '--primary-foreground': t?.darkPrimaryForeground,
+  '--secondary': t?.darkSecondary,
+  '--accent': t?.darkAccent,
+  '--muted': t?.darkMuted,
+  '--muted-foreground': t?.darkMutedForeground,
+  '--destructive': t?.darkDestructive,
+  '--border': t?.darkBorder,
+};
+for (const [prop, val] of Object.entries(darkMap)) {
+  if (val) darkEntries.push(`${prop}:${val}`);
+}
+
+const rootStyle = cssOverrides.length ? cssOverrides.join(';') : undefined;
+const darkStyleTag = darkEntries.length
+  ? `<style>.dark{${darkEntries.join(';')}}</style>`
+  : '';
+
+// Font — dynamic from Sanity or fallback to Inter
+const fontFamily = t?.fontFamily ?? 'Inter';
+const fontHeading = t?.fontFamilyHeading;
+const fontWeights = t?.fontWeights ?? '400;500;600;700';
+const fontsToLoad = [fontFamily, ...(fontHeading && fontHeading !== fontFamily ? [fontHeading] : [])];
+const googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsToLoad.map(f => `family=${encodeURIComponent(f)}:wght@${fontWeights}`).join('&')}&display=swap`;
+
+// Font-family CSS override
+const fontCssVars: string[] = [];
+if (t?.fontFamily) fontCssVars.push(`--font-sans:'${fontFamily}',system-ui,sans-serif`);
+if (fontHeading) fontCssVars.push(`--font-heading:'${fontHeading}',system-ui,sans-serif`);
+const fontStyleTag = fontCssVars.length
+  ? `<style>:root{${fontCssVars.join(';')}}</style>`
+  : '';
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang="fr" style={rootStyle}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -53,19 +115,15 @@ const resolvedOgImage = ogImage
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    />
+    <link rel="preload" as="style" href={googleFontsUrl} />
+    <link rel="stylesheet" href={googleFontsUrl} />
+
+    <Fragment set:html={darkStyleTag} />
+    <Fragment set:html={fontStyleTag} />
 
     <ViewTransitions />
   </head>
-  <body class="min-h-screen flex flex-col font-sans text-gray-900 bg-white antialiased">
+  <body class="min-h-screen flex flex-col font-sans text-foreground bg-background antialiased">
     <Header siteName={settings?.siteName ?? 'Starter Vitrine'} />
     <main class="flex-1">
       <slot />

@@ -9,6 +9,7 @@ import { testimonial } from './objects/testimonial';
 import { faq } from './objects/faq';
 import { cta } from './objects/cta';
 import { seo } from './objects/seo';
+import { theme } from './objects/theme';
 
 // Page builder blocks
 import { heroBlock } from './objects/blocks/heroBlock';
@@ -38,6 +39,7 @@ export const schemaTypes = [
   faq,
   cta,
   seo,
+  theme,
   // Page builder blocks
   heroBlock,
   featuresBlock,

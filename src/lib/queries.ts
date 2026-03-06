@@ -19,7 +19,8 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       phone,
       address,
       socialLinks[]{platform, url},
-      seo
+      seo,
+      theme
     }`
   );
 }
