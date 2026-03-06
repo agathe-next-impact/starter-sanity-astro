@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/blocks/Hero.astro';
+import Card from '../components/ui/Card.astro';
+import Badge from '../components/ui/Badge.astro';
+import Faq from '../components/blocks/Faq.astro';
+import Cta from '../components/blocks/Cta.astro';
+import { getAllServices } from '../lib/queries';
+import type { HeroData, ServiceItem } from '../lib/types';
+
+const services = await getAllServices();
+
+const heroData: HeroData = {
+  headline: 'Nos services',
+  subheadline: 'Des solutions adaptees a vos besoins pour vous accompagner dans votre reussite digitale.',
+  variant: 'centered',
+};
+
+const demoServices: ServiceItem[] = services.length > 0 ? services : [
+  { title: 'Creation de site web', slug: 'creation-site', icon: 'globe', shortDescription: 'Sites vitrines modernes et performants, adaptes a votre image de marque.', featured: true },
+  { title: 'Referencement SEO', slug: 'seo', icon: 'search', shortDescription: 'Optimisez votre visibilite sur les moteurs de recherche.', featured: false },
+  { title: 'Maintenance', slug: 'maintenance', icon: 'wrench', shortDescription: 'Support technique et mises a jour regulieres pour votre site.', featured: false },
+  { title: 'Design UI/UX', slug: 'design', icon: 'palette', shortDescription: 'Des interfaces intuitives et esthetiques pour vos utilisateurs.', featured: true },
+];
+---
+
+<BaseLayout
+  title="Services"
+  description="Decouvrez nos services et solutions digitales."
+>
+  <Hero data={heroData} compact />
+
+  <section class="py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {demoServices.map((service) => (
+          <Card>
+            <div class="flex items-start gap-4">
+              {service.icon && (
+                <div class="w-12 h-12 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center text-2xl shrink-0">
+                  {service.icon}
+                </div>
+              )}
+              <div>
+                <div class="flex items-center gap-2 mb-2">
+                  <h3 class="text-lg font-semibold text-gray-900">{service.title}</h3>
+                  {service.featured && <Badge variant="primary">Populaire</Badge>}
+                </div>
+                {service.shortDescription && (
+                  <p class="text-gray-600">{service.shortDescription}</p>
+                )}
+                {service.price && (
+                  <p class="mt-2 text-sm font-medium text-primary-600">{service.price}</p>
+                )}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Faq items={[]} />
+  <Cta />
+</BaseLayout>

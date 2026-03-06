@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/ui/Card.astro';
+import Badge from '../../components/ui/Badge.astro';
+import SanityImage from '../../components/ui/SanityImage.astro';
+import { getAllPosts } from '../../lib/queries';
+import type { Post } from '../../lib/types';
+
+const posts = await getAllPosts();
+
+const demoPosts: Post[] = posts.length > 0 ? posts : [
+  {
+    title: 'Comment creer un site vitrine performant',
+    slug: 'site-vitrine-performant',
+    publishedAt: '2024-01-15T10:00:00Z',
+    excerpt: 'Decouvrez les bonnes pratiques pour creer un site vitrine rapide et optimise pour le SEO.',
+    categories: ['Web', 'Performance'],
+  },
+  {
+    title: 'Les tendances web design en 2024',
+    slug: 'tendances-web-design',
+    publishedAt: '2024-01-10T10:00:00Z',
+    excerpt: 'Tour d\'horizon des tendances design qui marqueront l\'annee a venir.',
+    categories: ['Design', 'Tendances'],
+  },
+  {
+    title: 'Pourquoi choisir un CMS headless',
+    slug: 'cms-headless',
+    publishedAt: '2024-01-05T10:00:00Z',
+    excerpt: 'Les avantages d\'un CMS headless comme Sanity pour votre site web.',
+    categories: ['CMS', 'Technologie'],
+  },
+];
+
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<BaseLayout
+  title="Blog"
+  description="Nos derniers articles, conseils et actualites."
+>
+  <section class="py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+      <p class="text-lg text-gray-600 mb-12">Nos derniers articles et actualites.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {demoPosts.map((post) => (
+          <Card href={`/blog/${post.slug}`}>
+            {post.coverImage && (
+              <div class="mb-4 -mx-6 -mt-6 overflow-hidden rounded-t-xl">
+                <SanityImage
+                  source={post.coverImage}
+                  alt={post.coverImage.alt ?? post.title}
+                  width={400}
+                  height={225}
+                  class="w-full h-48 object-cover"
+                />
+              </div>
+            )}
+
+            {post.categories && post.categories.length > 0 && (
+              <div class="flex flex-wrap gap-2 mb-3">
+                {post.categories.map((cat) => (
+                  <Badge>{cat}</Badge>
+                ))}
+              </div>
+            )}
+
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">{post.title}</h2>
+            {post.excerpt && <p class="text-sm text-gray-600 mb-3">{post.excerpt}</p>}
+            <time class="text-xs text-gray-400" datetime={post.publishedAt}>
+              {formatDate(post.publishedAt)}
+            </time>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,71 @@
+---
+import Button from '../ui/Button.astro';
+import SanityImage from '../ui/SanityImage.astro';
+import type { HeroData } from '../../lib/types';
+
+interface Props {
+  data: HeroData;
+  compact?: boolean;
+}
+
+const { data, compact = false } = Astro.props;
+const variant = data.variant ?? 'default';
+const isSplit = variant === 'split' && data.image;
+const isCentered = variant === 'centered';
+---
+
+<section class:list={['relative overflow-hidden', compact ? 'py-16 lg:py-20' : 'py-20 lg:py-32']}>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class:list={[
+      isSplit && 'grid lg:grid-cols-2 gap-12 items-center',
+      !isSplit && 'max-w-3xl',
+      isCentered && 'mx-auto text-center',
+    ]}>
+      <div>
+        <h1 class:list={[
+          'font-bold tracking-tight text-gray-900',
+          compact ? 'text-3xl lg:text-4xl' : 'text-4xl lg:text-6xl',
+        ]}>
+          {data.headline}
+        </h1>
+
+        {data.subheadline && (
+          <p class:list={[
+            'mt-6 text-lg text-gray-600 leading-relaxed',
+            compact ? 'lg:text-xl' : 'lg:text-xl',
+          ]}>
+            {data.subheadline}
+          </p>
+        )}
+
+        {(data.ctaPrimary?.label || data.ctaSecondary?.label) && (
+          <div class:list={['mt-8 flex gap-4', isCentered && 'justify-center']}>
+            {data.ctaPrimary?.label && (
+              <Button href={data.ctaPrimary.href} variant="primary" size="lg">
+                {data.ctaPrimary.label}
+              </Button>
+            )}
+            {data.ctaSecondary?.label && (
+              <Button href={data.ctaSecondary.href} variant="outline" size="lg">
+                {data.ctaSecondary.label}
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {isSplit && data.image && (
+        <div class="relative">
+          <SanityImage
+            source={data.image}
+            alt={data.image.alt ?? ''}
+            width={600}
+            height={400}
+            loading="eager"
+            class="rounded-2xl shadow-xl w-full object-cover"
+          />
+        </div>
+      )}
+    </div>
+  </div>
+</section>

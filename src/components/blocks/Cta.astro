@@ -1,0 +1,27 @@
+---
+import Button from '../ui/Button.astro';
+import type { CtaData } from '../../lib/types';
+
+interface Props {
+  data?: CtaData;
+}
+
+const { data } = Astro.props;
+
+const headline = data?.headline ?? 'Pret a demarrer votre projet ?';
+const text = data?.text ?? 'Contactez-nous des aujourd\'hui pour discuter de vos besoins et obtenir un devis personnalise.';
+const buttonLabel = data?.buttonLabel ?? 'Nous contacter';
+const buttonHref = data?.buttonHref ?? '/contact';
+---
+
+<section class="py-16 lg:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="bg-primary-600 rounded-2xl p-8 lg:p-16 text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">{headline}</h2>
+      {text && <p class="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">{text}</p>}
+      <Button href={buttonHref} variant="secondary" size="lg">
+        {buttonLabel}
+      </Button>
+    </div>
+  </div>
+</section>

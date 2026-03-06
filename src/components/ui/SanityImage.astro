@@ -1,0 +1,48 @@
+---
+import { urlFor } from '../../lib/sanity';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
+
+interface Props {
+  source: SanityImageSource;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const {
+  source,
+  alt,
+  width = 800,
+  height,
+  class: className = '',
+  loading = 'lazy',
+} = Astro.props;
+
+const imageBuilder = urlFor(source).width(width);
+const finalBuilder = height ? imageBuilder.height(height) : imageBuilder;
+
+const jpgUrl = finalBuilder.format('jpg').url();
+const webpUrl = finalBuilder.format('webp').url();
+
+const srcset2x = urlFor(source).width(width * 2);
+const finalSrcset2x = height ? srcset2x.height(height * 2) : srcset2x;
+const webpUrl2x = finalSrcset2x.format('webp').url();
+---
+
+<picture>
+  <source
+    type="image/webp"
+    srcset={`${webpUrl} 1x, ${webpUrl2x} 2x`}
+  />
+  <img
+    src={jpgUrl}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+    class={className}
+  />
+</picture>

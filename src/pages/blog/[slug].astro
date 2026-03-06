@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SanityImage from '../../components/ui/SanityImage.astro';
+import Badge from '../../components/ui/Badge.astro';
+import RichText from '../../components/blocks/RichText.astro';
+import { getAllPosts, getPostBySlug } from '../../lib/queries';
+import { urlFor } from '../../lib/sanity';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+  }));
+};
+
+const { slug } = Astro.params;
+const post = await getPostBySlug(slug as string);
+
+if (!post) {
+  return Astro.redirect('/blog');
+}
+
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+const ogImage = post.seo?.ogImage
+  ? urlFor(post.seo.ogImage).width(1200).height(630).url()
+  : post.coverImage
+    ? urlFor(post.coverImage).width(1200).height(630).url()
+    : undefined;
+---
+
+<BaseLayout
+  title={post.seo?.metaTitle ?? post.title}
+  description={post.seo?.metaDescription ?? post.excerpt}
+  ogImage={ogImage}
+  noIndex={post.seo?.noIndex}
+>
+  <article class="py-16 lg:py-24">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <header class="mb-10">
+        {post.categories && post.categories.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-4">
+            {post.categories.map((cat) => (
+              <Badge variant="primary">{cat}</Badge>
+            ))}
+          </div>
+        )}
+
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{post.title}</h1>
+
+        <div class="flex items-center gap-4 text-sm text-gray-500">
+          {post.author && (
+            <div class="flex items-center gap-2">
+              {post.author.photo && (
+                <SanityImage
+                  source={post.author.photo}
+                  alt={post.author.name}
+                  width={32}
+                  height={32}
+                  class="w-8 h-8 rounded-full object-cover"
+                />
+              )}
+              <span class="font-medium text-gray-700">{post.author.name}</span>
+            </div>
+          )}
+          <time datetime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
+        </div>
+      </header>
+
+      {post.coverImage && (
+        <div class="mb-10 rounded-2xl overflow-hidden">
+          <SanityImage
+            source={post.coverImage}
+            alt={post.coverImage.alt ?? post.title}
+            width={800}
+            height={450}
+            loading="eager"
+            class="w-full object-cover"
+          />
+        </div>
+      )}
+
+      <RichText content={post.body} />
+
+      <footer class="mt-12 pt-8 border-t border-gray-200">
+        <a href="/blog" class="text-primary-600 hover:text-primary-700 font-medium transition-colors">
+          &larr; Retour au blog
+        </a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>

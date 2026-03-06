@@ -1,0 +1,73 @@
+---
+import type { SiteSettings } from '../lib/types';
+
+interface Props {
+  settings: SiteSettings | null;
+}
+
+const { settings } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-gray-900 text-gray-300">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <p class="text-lg font-bold text-white">{settings?.siteName ?? 'Starter Vitrine'}</p>
+        {settings?.tagline && <p class="mt-2 text-sm">{settings.tagline}</p>}
+      </div>
+
+      <div>
+        <p class="font-semibold text-white mb-3">Navigation</p>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/" class="hover:text-white transition-colors">Accueil</a></li>
+          <li><a href="/about" class="hover:text-white transition-colors">A propos</a></li>
+          <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
+          <li><a href="/blog" class="hover:text-white transition-colors">Blog</a></li>
+          <li><a href="/contact" class="hover:text-white transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-semibold text-white mb-3">Contact</p>
+        <ul class="space-y-2 text-sm">
+          {settings?.email && (
+            <li>
+              <a href={`mailto:${settings.email}`} class="hover:text-white transition-colors">
+                {settings.email}
+              </a>
+            </li>
+          )}
+          {settings?.phone && (
+            <li>
+              <a href={`tel:${settings.phone}`} class="hover:text-white transition-colors">
+                {settings.phone}
+              </a>
+            </li>
+          )}
+          {settings?.address && <li class="whitespace-pre-line">{settings.address}</li>}
+        </ul>
+
+        {settings?.socialLinks && settings.socialLinks.length > 0 && (
+          <div class="mt-4 flex gap-3">
+            {settings.socialLinks.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm hover:text-white transition-colors"
+                aria-label={`Visit our ${link.platform} page`}
+              >
+                {link.platform}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div class="mt-8 pt-8 border-t border-gray-800 text-center text-sm">
+      <p>&copy; {year} {settings?.siteName ?? 'Starter Vitrine'}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

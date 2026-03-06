@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/blocks/Hero.astro';
+import Features from '../components/blocks/Features.astro';
+import Testimonials from '../components/blocks/Testimonials.astro';
+import Cta from '../components/blocks/Cta.astro';
+import { getHomePage, getSiteSettings } from '../lib/queries';
+import type { HeroData } from '../lib/types';
+
+const page = await getHomePage();
+const settings = await getSiteSettings();
+
+const heroData: HeroData = page?.hero ?? {
+  headline: 'Votre site vitrine professionnel',
+  subheadline: 'Un starter template moderne et performant avec Astro 5 et Sanity CMS. Personnalisez-le facilement pour vos clients.',
+  ctaPrimary: { label: 'Decouvrir nos services', href: '/services' },
+  ctaSecondary: { label: 'Nous contacter', href: '/contact' },
+  variant: 'default',
+};
+---
+
+<BaseLayout
+  title={page?.seo?.metaTitle ?? settings?.siteName ?? 'Accueil'}
+  description={page?.seo?.metaDescription ?? settings?.tagline}
+>
+  <Hero data={heroData} />
+  <Features features={page?.features ?? []} title="Nos atouts" />
+  <Testimonials testimonials={page?.testimonials ?? []} />
+  <Cta />
+</BaseLayout>

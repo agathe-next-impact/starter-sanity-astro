@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/blocks/Hero.astro';
+import { getSiteSettings } from '../lib/queries';
+import type { HeroData } from '../lib/types';
+
+const settings = await getSiteSettings();
+
+const heroData: HeroData = {
+  headline: 'Contactez-nous',
+  subheadline: 'Une question, un projet ? N\'hesitez pas a nous ecrire, nous vous repondrons dans les plus brefs delais.',
+  variant: 'centered',
+};
+
+const formAction = import.meta.env.CONTACT_FORM_ACTION ?? '#';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contactez-nous pour discuter de votre projet."
+>
+  <Hero data={heroData} compact />
+
+  <section class="py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">Envoyez-nous un message</h2>
+
+          <form action={formAction} method="POST" class="space-y-6">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
+                Nom complet
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-0 transition-colors"
+                placeholder="Votre nom"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-0 transition-colors"
+                placeholder="votre@email.com"
+              />
+            </div>
+
+            <div>
+              <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">
+                Sujet
+              </label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-0 transition-colors"
+                placeholder="Sujet de votre message"
+              />
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700 mb-1">
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-0 transition-colors resize-y"
+                placeholder="Decrivez votre projet ou votre question..."
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+            >
+              Envoyer le message
+            </button>
+          </form>
+        </div>
+
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">Nos coordonnees</h2>
+
+          <div class="space-y-6">
+            {settings?.email && (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Email</h3>
+                <a href={`mailto:${settings.email}`} class="text-primary-600 hover:text-primary-700 transition-colors">
+                  {settings.email}
+                </a>
+              </div>
+            )}
+
+            {settings?.phone && (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Telephone</h3>
+                <a href={`tel:${settings.phone}`} class="text-primary-600 hover:text-primary-700 transition-colors">
+                  {settings.phone}
+                </a>
+              </div>
+            )}
+
+            {settings?.address && (
+              <div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-1">Adresse</h3>
+                <p class="text-gray-600 whitespace-pre-line">{settings.address}</p>
+              </div>
+            )}
+
+            {!settings?.email && !settings?.phone && !settings?.address && (
+              <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <p class="text-sm text-gray-500">
+                  Les coordonnees de contact s'afficheront ici une fois configurees dans Sanity Studio
+                  sous "Site Settings".
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

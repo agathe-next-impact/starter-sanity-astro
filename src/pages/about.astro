@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/blocks/Hero.astro';
+import RichText from '../components/blocks/RichText.astro';
+import Team from '../components/blocks/Team.astro';
+import { getPageBySlug, getTeamMembers } from '../lib/queries';
+import type { HeroData } from '../lib/types';
+
+const page = await getPageBySlug('about');
+const members = await getTeamMembers();
+
+const heroData: HeroData = page?.hero ?? {
+  headline: 'A propos de nous',
+  subheadline: 'Decouvrez notre histoire, nos valeurs et l\'equipe qui vous accompagne dans vos projets.',
+  variant: 'centered',
+};
+---
+
+<BaseLayout
+  title={page?.seo?.metaTitle ?? 'A propos'}
+  description={page?.seo?.metaDescription ?? 'Decouvrez notre equipe et nos valeurs.'}
+>
+  <Hero data={heroData} compact />
+
+  <RichText content={page?.content}>
+    <h2>Notre histoire</h2>
+    <p>
+      Fondee avec la passion de creer des experiences digitales remarquables, notre equipe accompagne
+      les entreprises dans leur transformation numerique. Nous croyons que chaque projet merite une
+      attention particuliere et des solutions sur mesure.
+    </p>
+    <h3>Nos valeurs</h3>
+    <p>
+      <strong>Excellence</strong> - Nous visons la qualite dans chaque aspect de notre travail.
+      <strong>Transparence</strong> - Une communication ouverte avec nos clients a chaque etape.
+      <strong>Innovation</strong> - Nous restons a la pointe des technologies pour vous offrir le meilleur.
+    </p>
+  </RichText>
+
+  <Team members={members} />
+</BaseLayout>
