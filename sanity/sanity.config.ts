@@ -10,7 +10,7 @@ const singletonActions = new Set(['publish', 'discardChanges', 'restore']);
 export default defineConfig({
   name: 'default',
   title: 'Starter Vitrine',
-  projectId: 'sym9ypo5',
+  projectId: 'w6fixec7',
   dataset: 'production',
   plugins: [
     structureTool({

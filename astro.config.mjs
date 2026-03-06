@@ -15,7 +15,7 @@ export default defineConfig({
     react(),
     sitemap(),
     sanity({
-      projectId: 'sym9ypo5',
+      projectId: 'w6fixec7',
       dataset: 'production',
       apiVersion: '2024-01-01',
       useCdn: true,
