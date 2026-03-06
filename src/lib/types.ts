@@ -110,3 +110,27 @@ export interface HomePageData {
   testimonials?: TestimonialData[];
   seo?: SeoData;
 }
+
+// Page builder types
+export interface BlockLink {
+  text?: string;
+  href?: string;
+  icon?: string;
+  target?: string;
+}
+
+export interface PageBlock {
+  _type: string;
+  _key: string;
+  variant: string;
+  title?: string;
+  description?: string;
+  [key: string]: any;
+}
+
+export interface PageWithBlocks {
+  title: string;
+  slug: string;
+  blocks?: PageBlock[];
+  seo?: SeoData;
+}

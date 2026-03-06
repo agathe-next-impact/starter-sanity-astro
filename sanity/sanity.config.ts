@@ -10,8 +10,8 @@ const singletonActions = new Set(['publish', 'discardChanges', 'restore']);
 export default defineConfig({
   name: 'default',
   title: 'Starter Vitrine',
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID ?? 'dummy',
-  dataset: import.meta.env.PUBLIC_SANITY_DATASET ?? 'production',
+  projectId: 'sym9ypo5',
+  dataset: 'production',
   plugins: [
     structureTool({
       structure: (S) =>

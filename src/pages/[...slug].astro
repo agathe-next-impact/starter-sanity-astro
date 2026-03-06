@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlockRenderer from '../components/blocks/BlockRenderer.astro';
+import { getPageWithBlocks, getAllPages } from '../lib/queries';
+
+export async function getStaticPaths() {
+  const pages = await getAllPages();
+  return pages.map((page) => ({
+    params: { slug: page.slug === 'home' ? undefined : page.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const page = await getPageWithBlocks(slug ?? 'home');
+
+if (!page) return Astro.redirect('/404');
+---
+
+<BaseLayout
+  title={page.seo?.metaTitle ?? page.title}
+  description={page.seo?.metaDescription}
+>
+  {page.blocks?.map((block) => (
+    <BlockRenderer block={block} />
+  ))}
+</BaseLayout>

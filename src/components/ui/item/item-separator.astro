@@ -1,0 +1,10 @@
+---
+import { Separator } from '../separator';
+
+interface Props {
+  class?: string;
+  [key: string]: any;
+}
+const { class: className, ...rest } = Astro.props;
+---
+<Separator class={className} {...rest} />

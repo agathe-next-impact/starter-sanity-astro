@@ -1,0 +1,169 @@
+---
+import { transformBlock } from '../../lib/blockTransformers';
+
+// Hero blocks
+import Hero1 from '../hero-1.astro';
+import Hero2 from '../hero-2.astro';
+import Hero3 from '../hero-3.astro';
+import Hero4 from '../hero-4.astro';
+import Hero5 from '../hero-5.astro';
+import Hero6 from '../hero-6.astro';
+import Hero7 from '../hero-7.astro';
+import Hero8 from '../hero-8.astro';
+import Hero9 from '../hero-9.astro';
+import Hero10 from '../hero-10.astro';
+import Hero11 from '../hero-11.astro';
+import Hero12 from '../hero-12.astro';
+import Hero13 from '../hero-13.astro';
+
+// Features blocks
+import Features1 from '../features-1.astro';
+import Features2 from '../features-2.astro';
+import Features3 from '../features-3.astro';
+import Features4 from '../features-4.astro';
+import Features5 from '../features-5.astro';
+import Features6 from '../features-6.astro';
+
+// Services blocks
+import Services1 from '../services-1.astro';
+import Services2 from '../services-2.astro';
+import Services3 from '../services-3.astro';
+import Services4 from '../services-4.astro';
+import Services5 from '../services-5.astro';
+import Services6 from '../services-6.astro';
+import Services7 from '../services-7.astro';
+
+// FAQ blocks
+import Faqs1 from '../faqs-1.astro';
+import Faqs2 from '../faqs-2.astro';
+import Faqs3 from '../faqs-3.astro';
+import Faqs4 from '../faqs-4.astro';
+
+// Reviews blocks
+import Reviews1 from '../reviews-1.astro';
+import Reviews2 from '../reviews-2.astro';
+import Reviews3 from '../reviews-3.astro';
+import Reviews4 from '../reviews-4.astro';
+import Reviews5 from '../reviews-5.astro';
+
+// CTA blocks
+import Cta1 from '../cta-1.astro';
+import Cta2 from '../cta-2.astro';
+import Cta3 from '../cta-3.astro';
+import Cta4 from '../cta-4.astro';
+import Cta5 from '../cta-5.astro';
+import Cta6 from '../cta-6.astro';
+import Cta7 from '../cta-7.astro';
+import Cta8 from '../cta-8.astro';
+
+// Pricings blocks
+import Pricings1 from '../pricings-1.astro';
+import Pricings2 from '../pricings-2.astro';
+import Pricings3 from '../pricings-3.astro';
+
+// Contact blocks
+import Contact1 from '../contact-1.astro';
+import Contact2 from '../contact-2.astro';
+import Contact3 from '../contact-3.astro';
+
+// Content blocks
+import Content1 from '../content-1.astro';
+import Content2 from '../content-2.astro';
+import Content3 from '../content-3.astro';
+import Content4 from '../content-4.astro';
+import Content5 from '../content-5.astro';
+import Content6 from '../content-6.astro';
+
+// Logos blocks
+import Logos1 from '../logos-1.astro';
+import Logos2 from '../logos-2.astro';
+import Logos3 from '../logos-3.astro';
+
+// Articles blocks
+import Articles1 from '../articles-1.astro';
+import Articles2 from '../articles-2.astro';
+import Articles3 from '../articles-3.astro';
+import Articles4 from '../articles-4.astro';
+
+// Banner blocks
+import Banner1 from '../banner-1.astro';
+import Banner2 from '../banner-2.astro';
+
+// Header blocks
+import Header1 from '../header-1.astro';
+import Header2 from '../header-2.astro';
+import Header3 from '../header-3.astro';
+
+// Footer blocks
+import Footer1 from '../footer-1.astro';
+import Footer2 from '../footer-2.astro';
+
+// Product blocks
+import Product1 from '../product-1.astro';
+import Products1 from '../products-1.astro';
+import Products2 from '../products-2.astro';
+import Products3 from '../products-3.astro';
+import Products4 from '../products-4.astro';
+import Products5 from '../products-5.astro';
+
+// Article detail blocks
+import Article1 from '../article-1.astro';
+import Article2 from '../article-2.astro';
+
+const componentMap: Record<string, any> = {
+  'hero-1': Hero1, 'hero-2': Hero2, 'hero-3': Hero3, 'hero-4': Hero4,
+  'hero-5': Hero5, 'hero-6': Hero6, 'hero-7': Hero7, 'hero-8': Hero8,
+  'hero-9': Hero9, 'hero-10': Hero10, 'hero-11': Hero11, 'hero-12': Hero12,
+  'hero-13': Hero13,
+  'features-1': Features1, 'features-2': Features2, 'features-3': Features3,
+  'features-4': Features4, 'features-5': Features5, 'features-6': Features6,
+  'services-1': Services1, 'services-2': Services2, 'services-3': Services3,
+  'services-4': Services4, 'services-5': Services5, 'services-6': Services6,
+  'services-7': Services7,
+  'faqs-1': Faqs1, 'faqs-2': Faqs2, 'faqs-3': Faqs3, 'faqs-4': Faqs4,
+  'reviews-1': Reviews1, 'reviews-2': Reviews2, 'reviews-3': Reviews3,
+  'reviews-4': Reviews4, 'reviews-5': Reviews5,
+  'cta-1': Cta1, 'cta-2': Cta2, 'cta-3': Cta3, 'cta-4': Cta4,
+  'cta-5': Cta5, 'cta-6': Cta6, 'cta-7': Cta7, 'cta-8': Cta8,
+  'pricings-1': Pricings1, 'pricings-2': Pricings2, 'pricings-3': Pricings3,
+  'contact-1': Contact1, 'contact-2': Contact2, 'contact-3': Contact3,
+  'content-1': Content1, 'content-2': Content2, 'content-3': Content3,
+  'content-4': Content4, 'content-5': Content5, 'content-6': Content6,
+  'logos-1': Logos1, 'logos-2': Logos2, 'logos-3': Logos3,
+  'articles-1': Articles1, 'articles-2': Articles2, 'articles-3': Articles3,
+  'articles-4': Articles4,
+  'banner-1': Banner1, 'banner-2': Banner2,
+  'header-1': Header1, 'header-2': Header2, 'header-3': Header3,
+  'footer-1': Footer1, 'footer-2': Footer2,
+  'product-1': Product1, 'products-1': Products1, 'products-2': Products2,
+  'products-3': Products3, 'products-4': Products4, 'products-5': Products5,
+  'article-1': Article1, 'article-2': Article2,
+};
+
+interface Props {
+  block: any;
+}
+
+const { block } = Astro.props;
+const variant = block.variant;
+const Component = componentMap[variant];
+
+if (!Component) {
+  console.warn(`Unknown block variant: ${variant}`);
+}
+
+const props = transformBlock(block);
+
+// Build slot HTML from title/description (used by most blocks via <slot />)
+const isBanner = block._type === 'bannerBlock';
+const slotParts: string[] = [];
+if (!isBanner && block.title) slotParts.push(`<h2>${block.title}</h2>`);
+if (!isBanner && block.description) slotParts.push(`<p>${block.description}</p>`);
+const slotContent = slotParts.join('');
+---
+
+{Component && (
+  <Component {...props}>
+    {slotContent && <Fragment set:html={slotContent} />}
+  </Component>
+)}

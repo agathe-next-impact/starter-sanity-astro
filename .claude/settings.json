@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat /c/dev/starter-sanity-astro/.vercel/output/functions/*/package.json)"
+    ]
+  }
+}

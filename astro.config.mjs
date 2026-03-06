@@ -1,18 +1,22 @@
 import { defineConfig } from 'astro/config';
-import sanity from '@astrojs/sanity';
-import tailwind from '@astrojs/tailwind';
+import sanity from '@sanity/astro';
+import tailwindcss from '@tailwindcss/vite';
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   site: 'https://example.com',
   output: 'static',
+  vite: {
+    plugins: [tailwindcss()],
+  },
   integrations: [
-    tailwind(),
+    react(),
     sitemap(),
     sanity({
-      projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID ?? '',
-      dataset: import.meta.env.PUBLIC_SANITY_DATASET ?? 'production',
+      projectId: 'sym9ypo5',
+      dataset: 'production',
       apiVersion: '2024-01-01',
       useCdn: true,
       studioBasePath: '/studio',

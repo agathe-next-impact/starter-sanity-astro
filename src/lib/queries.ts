@@ -6,6 +6,7 @@ import type {
   TeamMemberItem,
   PageData,
   HomePageData,
+  PageWithBlocks,
 } from './types';
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -105,5 +106,23 @@ export async function getPageBySlug(slug: string): Promise<PageData | null> {
       seo
     }`,
     { slug }
+  );
+}
+
+export async function getPageWithBlocks(slug: string): Promise<PageWithBlocks | null> {
+  return sanityClient.fetch<PageWithBlocks | null>(
+    `*[_type == "page" && slug.current == $slug][0]{
+      title,
+      "slug": slug.current,
+      blocks[]{...},
+      seo
+    }`,
+    { slug }
+  );
+}
+
+export async function getAllPages(): Promise<{ slug: string }[]> {
+  return sanityClient.fetch<{ slug: string }[]>(
+    `*[_type == "page"]{"slug": slug.current}`
   );
 }
